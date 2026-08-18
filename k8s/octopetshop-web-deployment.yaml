@@ -23,6 +23,9 @@ spec:
             - containerPort: 5001
               name: https-port
           env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:5000"
+              
             - name: ProductServiceBaseUrl
               value: http://octopetshop-productservice-cluster-ip-service:5011/
             - name: ShoppingCartServiceBaseUrl
