@@ -18,6 +18,9 @@ spec:
           #imagePullPolicy: Never
           image: octopussamples/octopetshop-shoppingcartservice
           env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:5012"
+              
             - name: OPSConnectionString
               valueFrom:
                 secretKeyRef:
