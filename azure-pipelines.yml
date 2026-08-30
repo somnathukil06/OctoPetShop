@@ -1,6 +1,4 @@
-# Docker
-# Build and push an image to Azure Container Registry
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+# OctoPetShop - Build and Push all Docker Images to Azure Container Registry
 
 trigger:
 - master
@@ -9,31 +7,66 @@ resources:
 - repo: self
 
 variables:
-  # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'c4357bb4-fecd-4150-aa80-82656b0379c8'
-  imageRepository: 'octopetshop'
   containerRegistry: 'octopetshoplab2026-f6cwffezbnddgmam.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/OctopusSamples.OctoPetShop.Database/dockerfile'
+
   tag: '$(Build.BuildId)'
 
-  # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
-  displayName: Build and push stage
+  displayName: Build and Push OctoPetShop Images
+
   jobs:
-  - job: Build
-    displayName: Build
+  - job: BuildAndPush
+    displayName: Build and Push Docker Images
+
     pool:
       vmImage: $(vmImageName)
+
     steps:
+
+    # Database
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and push Database image
       inputs:
         command: buildAndPush
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        repository: octopetshop-database
+        dockerfile: '$(Build.SourcesDirectory)/OctopusSamples.OctoPetShop.Database/dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    # Product Service
+    - task: Docker@2
+      displayName: Build and push ProductService image
+      inputs:
+        command: buildAndPush
+        repository: octopetshop-productservice
+        dockerfile: '$(Build.SourcesDirectory)/OctopusSamples.OctoPetShop.ProductService/dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    # Shopping Cart Service
+    - task: Docker@2
+      displayName: Build and push ShoppingCartService image
+      inputs:
+        command: buildAndPush
+        repository: octopetshop-shoppingcartservice
+        dockerfile: '$(Build.SourcesDirectory)/OctopusSamples.OctoPetShop.ShoppingCartService/dockerfile'
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    # Web
+    - task: Docker@2
+      displayName: Build and push Web image
+      inputs:
+        command: buildAndPush
+        repository: octopetshop-web
+        dockerfile: '$(Build.SourcesDirectory)/OctopusSamples.OctoPetShop.Web/dockerfile'
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
