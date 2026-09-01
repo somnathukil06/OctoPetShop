@@ -16,7 +16,7 @@ spec:
         - name: shoppingcart
           #image: octopetshop_shoppingcartservice
           #imagePullPolicy: Never
-          image: octopetshoplab2026-f6cwffezbnddgmam.azurecr.io/octopetshop-shoppingcartservice:3
+          image: octopetshoplab2026-f6cwffezbnddgmam.azurecr.io/octopetshop-shoppingcartservice:#{ImageTag}
           env:
             - name: ASPNETCORE_URLS
               value: "http://+:5012"
