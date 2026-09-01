@@ -74,7 +74,7 @@ stages:
       inputs:
         OctoConnectedServiceName: 'Octopus'
         Space: 'Default'
-        Project: 'OctoPetShop'
+        Project: 'OctoPetShop-CD'
         ReleaseNumber: '$(Build.BuildId)'
 
     # Deploy Octopus Release
@@ -83,6 +83,6 @@ stages:
       inputs:
         OctoConnectedServiceName: 'Octopus'
         Space: 'Default'
-        Project: 'OctoPetShop'
+        Project: 'OctoPetShop-CD'
         ReleaseNumber: '$(create_release.release_number)'
         Environment: 'Development'
