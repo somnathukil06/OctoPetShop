@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: productservice
-          image: octopetshoplab2026-f6cwffezbnddgmam.azurecr.io/octopetshop-productservice:3
+          image: octopetshoplab2026-f6cwffezbnddgmam.azurecr.io/octopetshop-productservice:#{ImageTag}
           #image: octopetshop_productservice
           #imagePullPolicy: Never
           env:
