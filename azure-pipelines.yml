@@ -79,7 +79,6 @@ stages:
 
     # Deploy Octopus Release
     - task: OctopusDeployRelease@6
-      name: deploy_release
       displayName: 'Deploy Octopus Release'
       inputs:
         OctoConnectedServiceName: 'Octopus'
