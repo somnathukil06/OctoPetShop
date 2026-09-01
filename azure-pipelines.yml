@@ -1,5 +1,3 @@
-# OctoPetShop - Build and Push all Docker Images to Azure Container Registry
-
 trigger:
 - master
 
@@ -9,14 +7,12 @@ resources:
 variables:
   dockerRegistryServiceConnection: 'c4357bb4-fecd-4150-aa80-82656b0379c8'
   containerRegistry: 'octopetshoplab2026-f6cwffezbnddgmam.azurecr.io'
-
   tag: '$(Build.BuildId)'
-
   vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
-  displayName: Build and Push OctoPetShop Images
+  displayName: Build, Push and Deploy
 
   jobs:
   - job: BuildAndPush
@@ -70,3 +66,24 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+    # Create Octopus Release
+    - task: OctopusCreateRelease@6
+      name: create_release
+      displayName: 'Create Octopus Release'
+      inputs:
+        OctoConnectedServiceName: 'Octopus'
+        Space: 'Default'
+        Project: 'OctoPetShop'
+        ReleaseNumber: '$(Build.BuildId)'
+
+    # Deploy Octopus Release
+    - task: OctopusDeployRelease@6
+      name: deploy_release
+      displayName: 'Deploy Octopus Release'
+      inputs:
+        OctoConnectedServiceName: 'Octopus'
+        Space: 'Default'
+        Project: 'OctoPetShop'
+        ReleaseNumber: '$(create_release.release_number)'
+        Environment: 'Development'
