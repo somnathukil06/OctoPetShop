@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: octopetshop-dbup
+  name: octopetshop-dbup-#{Octopus.Release.Number}
 spec:
   template:
     spec:
